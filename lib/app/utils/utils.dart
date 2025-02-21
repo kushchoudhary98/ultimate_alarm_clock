@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -799,12 +800,17 @@ class Utils {
   }
 
   static sendSMS(String phoneNo, String text) async {
-    final Telephony telephony = Telephony.instance;
-    await telephony.requestPhoneAndSmsPermissions.then((value) {
-      if (value == true) {
-        telephony.sendSms(to: phoneNo, message: text);
-      }
-    });
+    if (Platform.isAndroid) {
+      final Telephony telephony = Telephony.instance;
+      await telephony.requestPhoneAndSmsPermissions.then((value) {
+        if (value == true) {
+          telephony.sendSms(to: phoneNo, message: text);
+        }
+      });
+    }
+    else{
+      // for other platforms
+    }
   }
 
   static String _twoDigits(int n) => n.toString().padLeft(2, '0');

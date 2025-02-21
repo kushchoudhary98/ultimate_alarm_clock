@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,13 +18,17 @@ Locale? loc;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
-    }
-  });
 
-  await Firebase.initializeApp();
+  if (Platform.isAndroid) {
+    await Permission.notification.isDenied.then((value) {
+      if (value) {
+        Permission.notification.request();
+      }
+    });
+  }
+  
+
+  //await Firebase.initializeApp();
 
   await Get.putAsync(() => GetStorageProvider().init());
 
