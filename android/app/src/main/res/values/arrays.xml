@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="GetAlarmQueries">
+        <item>Hey Google, ask Ultimate Alarm Clock for the latest alarm.</item>
+        <item>Hey Google, what is my most recent alarm in Ultimate Alarm Clock?</item>
+    </string-array>
+</resources>

@@ -51,6 +51,23 @@ class MainActivity : FlutterActivity() {
 
         val intent = intent
 
+        val data = intent.data
+        print("DATA FROM ASSISTANT: $data")
+        if (data != null) {
+            val host = data.host
+            print("HOST: $host")
+            if ("createAlarm" == host) {
+                val hour = data.getQueryParameter("hour")!!.toInt()
+                val minute = data.getQueryParameter("minute")!!.toInt()
+                print("Google Assistant working: ${hour}:${minute}")
+            } else if ("modifyAlarm" == host) {
+                val id = data.getQueryParameter("id")!!.toInt()
+                val hour = data.getQueryParameter("hour")!!.toInt()
+                val minute = data.getQueryParameter("minute")!!.toInt()
+                print("Google Assistant working (modify alarm): ${hour}:${minute}")
+            }
+        }
+
         if (intent != null && intent.hasExtra(EXTRA_KEY)) {
             val receivedData = intent.getStringExtra(EXTRA_KEY)
             if (receivedData == "true") {

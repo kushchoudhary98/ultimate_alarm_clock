@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <capability
+        android:name="custom.actions.intent.GET_ALARM"
+        app:queryPatterns="@array/GetAlarmQueries">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.ccextractor.ultimate_alarm_clock"
+            android:targetClass="com.ccextractor.ultimate_alarm_clock.MainActivity">
+            <url-template
+                android:value="http://ccextractor.com/getAlarms" />
+        </intent>
+    </capability>
+</shortcuts>
