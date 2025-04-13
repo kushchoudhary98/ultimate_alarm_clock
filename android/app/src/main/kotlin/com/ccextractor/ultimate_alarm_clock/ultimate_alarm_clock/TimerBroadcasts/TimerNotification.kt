@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.ccextractor.ultimate_alarm_clock.getLatestTimer
+import com.ccextractor.ultimate_alarm_clock.ultimate_alarm_clock.TimerBroadcasts.TimerDismiss
 
 
 class TimerNotification : BroadcastReceiver() {
@@ -25,8 +26,15 @@ class TimerNotification : BroadcastReceiver() {
 
             override fun onFinish() {
                 notificationManager.cancel(1)
+                if (time != null) {
+                    showDismissNotification(time.second, time.first, context)
+                }
             }
         })
+
+        if(intent.action == "com.ccextractor.ultimate_alarm_clock.DISMISS_TIMER"){
+            print("Dismissed NOtification")
+        }
 
         if (intent.action == "com.ccextractor.ultimate_alarm_clock.START_TIMERNOTIF" || intent.action == Intent.ACTION_BOOT_COMPLETED) {
             createNotificationChannel(context)
@@ -44,7 +52,6 @@ class TimerNotification : BroadcastReceiver() {
         if (intent.action == "com.ccextractor.ultimate_alarm_clock.STOP_TIMERNOTIF") {
 
             commonTimer.stopTimer()
-
         }
 
 
@@ -82,6 +89,29 @@ class TimerNotification : BroadcastReceiver() {
             .setDeleteIntent(deletePendingIntent)
             .build()
         notificationManager.notify(1, notification)
+    }
+
+    private fun showDismissNotification(milliseconds: Long, timerID: Int, context: Context) {
+        var notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val dismissIntent = Intent(context, TimerDismiss::class.java).apply {
+            action = "com.ccextractor.ultimate_alarm_clock.DISMISS_TIMER"
+            putExtra("timerID", timerID)
+        }
+        val dismissPendingIntent = PendingIntent.getBroadcast(
+            context, 10, dismissIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, TimerService.TIMER_CHANNEL_ID)
+            .setSmallIcon(R.mipmap.launcher_icon)
+            .setContentTitle("Dismiss Timer")
+            .setContentText(formatDuration(milliseconds))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setOnlyAlertOnce(true)
+            .addAction(R.mipmap.launcher_icon, "Dismiss", dismissPendingIntent)
+            .build()
+        notificationManager.notify(2, notification)
     }
 
     private fun formatDuration(milliseconds: Long): String {

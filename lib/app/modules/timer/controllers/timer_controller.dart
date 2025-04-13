@@ -39,6 +39,13 @@ class TimerController extends FullLifeCycleController with FullLifeCycleMixin {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     isarTimers = IsarDb.getTimers();
+    timerChannel.setMethodCallHandler((call) async {
+      if (call.method == 'dismissTimer') {
+        final timerID = call.arguments['timerID'];
+        print(timerID);
+        stopRinger(timerID);
+      }
+    }); 
     await updateTimerInfo();
     scrollController.addListener(() {
       if (scrollController.offset < scrollController.position.maxScrollExtent &&
@@ -69,6 +76,7 @@ class TimerController extends FullLifeCycleController with FullLifeCycleMixin {
 
   void stopRinger(int id) async {
     try {
+      print('timer id: $id');
       isRinging.value.remove(id);
       print(isRinging.value);
       if (isRinging.value.length == 0) {

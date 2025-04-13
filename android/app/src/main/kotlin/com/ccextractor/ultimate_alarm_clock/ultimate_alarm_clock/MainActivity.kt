@@ -32,6 +32,8 @@ class MainActivity : FlutterActivity() {
         private var isAlarm: String? = "true"
         val alarmConfig = hashMapOf("shouldAlarmRing" to false, "alarmIgnore" to false)
         private var ringtone: Ringtone? = null
+        private lateinit var methodChannel1: MethodChannel
+        private lateinit var methodChannel2: MethodChannel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +48,8 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
-        var methodChannel1 = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL1)
-        var methodChannel2 = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL2)
+        methodChannel1 = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL1)
+        methodChannel2 = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL2)
 
         val intent = intent
 
@@ -286,6 +288,11 @@ class MainActivity : FlutterActivity() {
 
     private fun stopDefaultAlarm() {
         ringtone?.stop()
+    }
+
+    fun dismissTimer(timerID: Int) {
+        val args = mapOf("timerID" to timerID)
+        methodChannel2.invokeMethod("dismissTimer", args)
     }
 
     private fun openAndroidPermissionsMenu() {
