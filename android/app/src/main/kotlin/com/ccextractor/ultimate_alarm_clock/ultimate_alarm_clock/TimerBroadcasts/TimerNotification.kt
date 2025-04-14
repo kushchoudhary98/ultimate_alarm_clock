@@ -99,7 +99,7 @@ class TimerNotification : BroadcastReceiver() {
             putExtra("timerID", timerID)
         }
         val dismissPendingIntent = PendingIntent.getBroadcast(
-            context, 10, dismissIntent,
+            context, timerID+10, dismissIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
 

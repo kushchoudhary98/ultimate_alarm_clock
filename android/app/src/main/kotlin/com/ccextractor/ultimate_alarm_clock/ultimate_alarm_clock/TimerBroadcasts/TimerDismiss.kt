@@ -7,7 +7,8 @@ import com.ccextractor.ultimate_alarm_clock.MainActivity
 
 class TimerDismiss: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val timerID = intent.getIntExtra("timerID", 0)
-        MainActivity().dismissTimer(timerID)
+        val timerID: Int = intent.getIntExtra("timerID", 0)
+        val args = hashMapOf("timerID" to timerID)
+        MainActivity.methodChannel2.invokeMethod("dismissTimer", args)
     }
 }

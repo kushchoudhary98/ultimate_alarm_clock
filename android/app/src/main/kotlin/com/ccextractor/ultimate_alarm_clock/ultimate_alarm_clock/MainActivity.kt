@@ -32,8 +32,8 @@ class MainActivity : FlutterActivity() {
         private var isAlarm: String? = "true"
         val alarmConfig = hashMapOf("shouldAlarmRing" to false, "alarmIgnore" to false)
         private var ringtone: Ringtone? = null
-        private lateinit var methodChannel1: MethodChannel
-        private lateinit var methodChannel2: MethodChannel
+        lateinit var methodChannel1: MethodChannel
+        lateinit var methodChannel2: MethodChannel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

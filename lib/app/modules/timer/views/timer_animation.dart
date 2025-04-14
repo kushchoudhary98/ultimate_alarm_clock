@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -43,6 +44,9 @@ class _TimerAnimatedCardState extends State<TimerAnimatedCard>
       } else {
         stopTimer();
         controller.startRinger(widget.timer.timerId);
+        timerChannel.invokeMethod('dismissTimer', {
+          'timerID': widget.timer.timerId,
+        });
       }
     });
   }
@@ -51,7 +55,12 @@ class _TimerAnimatedCardState extends State<TimerAnimatedCard>
     _timerCounter!.cancel();
   }
 
-  void dismissTimer() {
+  void dismissTimer(int id) {
+    print('timer id: $id');
+
+    if(id != widget.timer.timerId){
+      return;
+    }
     setState(() {
       if (widget.timer.isPaused == 0) {
         stopTimer();
@@ -81,9 +90,9 @@ class _TimerAnimatedCardState extends State<TimerAnimatedCard>
     super.initState();
     timerChannel.setMethodCallHandler((call) async {
       if (call.method == 'dismissTimer') {
-        final timerID = call.arguments['timerID'];
+        int timerID = call.arguments['timerID'];
         print(timerID);
-        dismissTimer();
+        dismissTimer(timerID);
       }
     }); 
     if (Utils.getDifferenceMillisFromNow(
@@ -236,7 +245,7 @@ class _TimerAnimatedCardState extends State<TimerAnimatedCard>
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        dismissTimer();
+                                        dismissTimer(widget.timer.timerId);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
