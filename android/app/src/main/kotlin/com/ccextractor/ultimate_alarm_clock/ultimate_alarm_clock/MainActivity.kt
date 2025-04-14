@@ -91,6 +91,7 @@ class MainActivity : FlutterActivity() {
                 var notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.cancel(1)
+                notificationManager.cancel(2)
             } else {
                 result.notImplemented()
             }
@@ -291,7 +292,7 @@ class MainActivity : FlutterActivity() {
     }
 
     fun dismissTimer(timerID: Int) {
-        val args = mapOf("timerID" to timerID)
+        val args = hashMapOf("timerID" to timerID)
         methodChannel2.invokeMethod("dismissTimer", args)
     }
 
